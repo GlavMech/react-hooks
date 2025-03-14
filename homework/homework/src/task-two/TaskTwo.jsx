@@ -1,19 +1,19 @@
-import React, { useState, useCallback, useMemo, memo } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import RenderCounter from './render-counter/RenderCounter';
 import './TaskTwo.css';
 
 export default function TaskTwo() {
     const update = useUpdate();
+    
     return (
         <div className="TaskTwo">
             <button onClick={update}>Обновить компонент</button>
-            {/*<RenderCounter />*/}
             <Root />
         </div>
     );
 }
 
-const Root = memo(() => {
+const Root = () => {
     const [value, setValue] = useState('');
 
     const handleChange = useCallback((event) => {
@@ -22,24 +22,25 @@ const Root = memo(() => {
 
     return (
         <form className="form-container">
+            <RenderCounter /> {/* Оставляем RenderCounter только здесь */}
             Введенное значение: {value}
-            {/*<RenderCounter />*/}
-            <Input onChange={handleChange} />
+            <MemoizedInput onChange={handleChange} />
         </form>
     );
-});
+};
 
-const Input = memo(({ onChange }) => {
+// Убираем RenderCounter из Input
+const MemoizedInput = memo(({ onChange }) => {
     return (
         <div className="input-container">
             <input type="text" className="input-field" name="value" onChange={onChange} />
-            {/*<RenderCounter />*/}
         </div>
     );
 });
 
 function useUpdate() {
     const [, setCount] = useState(0);
+    
     return useCallback(() => {
         setCount(counter => counter + 1);
     }, []);
